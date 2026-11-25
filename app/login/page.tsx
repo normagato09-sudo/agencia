@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { claveConfigurada, entrar, estaDentro } from '@/lib/auth';
 import Logo from '@/components/Logo';
+import InstalarApp from '@/components/InstalarApp';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
             <input id="clave" name="clave" type="password" autoFocus required />
             {error && <div style={{ color: 'var(--rojo)' }}>Contraseña incorrecta.</div>}
             <button className="btn" type="submit">Entrar</button>
+            <InstalarApp grande />
           </>
         )}
       </form>

@@ -1,6 +1,22 @@
-// Service worker de Mi Oficina: muestra las notificaciones aunque la app esté cerrada.
-self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+// Service worker de Mi Oficina: permite instalar la app y recibir notificaciones aunque esté cerrada.
+const CACHE = 'mi-oficina-v1';
+const SIN_CONEXION = '/offline.html';
+
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll([SIN_CONEXION, '/icono-192.png'])).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', (e) => {
+  e.waitUntil((async () => {
+    for (const k of await caches.keys()) if (k !== CACHE) await caches.delete(k);
+    await self.clients.claim();
+  })());
+});
+
+// Siempre va a internet (los datos tienen que ser frescos); solo si no hay conexión enseña una página de aviso.
+self.addEventListener('fetch', (e) => {
+  if (e.request.mode !== 'navigate') return;
+  e.respondWith(fetch(e.request).catch(() => caches.match(SIN_CONEXION)));
+});
 
 self.addEventListener('push', (event) => {
   let d = {};

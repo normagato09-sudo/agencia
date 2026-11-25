@@ -4,7 +4,7 @@ import { estaDentro } from '@/lib/auth';
 import { agentes, preparar } from '@/lib/db';
 import Logo from '@/components/Logo';
 import Nav from '@/components/Nav';
-import RegistrarSW from '@/components/RegistrarSW';
+import InstalarApp from '@/components/InstalarApp';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,11 +22,11 @@ export default async function OficinaLayout({ children }: { children: React.Reac
 
   return (
     <>
-      <RegistrarSW />
       <header className="cabecera">
         <Link href="/" className="marca"><div className="logo"><Logo /></div>Mi Oficina</Link>
         <Nav />
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <InstalarApp />
           <span className="chip" style={{ background: '#13261F', color: '#6EE7B7' }}><span className="punto" style={{ background: 'var(--verde)' }} />{total} agentes</span>
           <div className="inicial" style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--ambar)' }}>N</div>
         </div>
