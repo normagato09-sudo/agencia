@@ -1,5 +1,5 @@
 // Service worker de Mi Oficina: permite instalar la app y recibir notificaciones aunque esté cerrada.
-const CACHE = 'mi-oficina-v1';
+const CACHE = 'mi-oficina-v2';
 const SIN_CONEXION = '/offline.html';
 
 self.addEventListener('install', (e) => {
