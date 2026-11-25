@@ -54,3 +54,21 @@ export async function cerrarSesion() {
   await salir();
   redirect('/login');
 }
+
+export async function crearRecordatorio(form: FormData) {
+  await asegurar();
+  const agente = String(form.get('agente') ?? '');
+  const fecha = String(form.get('fecha') ?? '');
+  const hora = String(form.get('hora') ?? '') || '09:00';
+  const texto = String(form.get('texto') ?? '').trim().slice(0, 300);
+  if (!agente || !/^\d{4}-\d{2}-\d{2}$/.test(fecha) || !/^\d{2}:\d{2}$/.test(hora) || !texto) return;
+  await sql`INSERT INTO recordatorios (agente, fecha, hora, texto) VALUES (${agente}, ${fecha}, ${hora}, ${texto})`;
+  revalidatePath('/', 'layout');
+}
+
+export async function borrarRecordatorio(form: FormData) {
+  await asegurar();
+  const id = Number(form.get('id'));
+  if (id) await sql`DELETE FROM recordatorios WHERE id = ${id}`;
+  revalidatePath('/', 'layout');
+}

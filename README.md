@@ -41,6 +41,21 @@ Content-Type: application/json
 
 El gasto del mes aparece en la pantalla Avisos.
 
+## Cada 10 minutos (GitHub Actions)
+
+`.github/workflows/vigilar.yml` llama a `/api/cron/frecuente`, que:
+- manda los **recordatorios** que ya tocan (se crean dentro de cada edificio: p. ej. «publicar en Instagram»);
+- mira si hay **tickets nuevos** en el Discord de Lanzora.
+
+## Tickets de Discord (agente lanzora-tickets)
+
+1. discord.com/developers/applications → **New Application** («Mi Oficina») → **Bot** → **Reset Token** y copia el token.
+2. **OAuth2 → URL Generator**: marca `bot` y el permiso **View Channels**; abre la URL y añade el bot al servidor de Lanzora.
+3. En Discord activa el modo desarrollador (Ajustes → Avanzado) y copia con clic derecho el **ID del servidor** (y, si quieres, el de la categoría de tickets).
+4. En Vercel (agencia): `DISCORD_BOT_TOKEN`, `DISCORD_TICKETS_SERVIDOR` y, opcional, `DISCORD_TICKETS_CATEGORIA`. Redeploy.
+
+Sin categoría, cuenta como ticket cualquier canal con «ticket» en el nombre.
+
 ## Más adelante
 
 - Conectar cada app (Lanzora, Mi Dinero, ORGANIZATOR, Rubiko, Fútbol, CIFA) a su agente.

@@ -15,6 +15,7 @@ export type Aviso = {
   id: number; agente: string | null; proyecto: string | null; nivel: 'normal' | 'importante' | 'urgente';
   titulo: string; texto: string; leido: boolean; creado: string;
 };
+export type Recordatorio = { id: number; agente: string; fecha: string; hora: string; texto: string; enviado: boolean };
 export type Mensaje = { id: number; de: 'norma' | 'agente'; agente: string | null; texto: string; creado: string };
 
 let listo: Promise<void> | null = null;
@@ -36,6 +37,9 @@ export function preparar(): Promise<void> {
         creado timestamptz NOT NULL DEFAULT now())`;
       await sql`CREATE TABLE IF NOT EXISTS mensajes (
         id serial PRIMARY KEY, de text NOT NULL, agente text, texto text NOT NULL, creado timestamptz NOT NULL DEFAULT now())`;
+      await sql`CREATE TABLE IF NOT EXISTS recordatorios (
+        id serial PRIMARY KEY, agente text NOT NULL, fecha date NOT NULL, hora text NOT NULL DEFAULT '09:00',
+        texto text NOT NULL, enviado boolean NOT NULL DEFAULT false, creado timestamptz NOT NULL DEFAULT now())`;
       await sql`CREATE TABLE IF NOT EXISTS push_subs (
         endpoint text PRIMARY KEY, datos jsonb NOT NULL, creado timestamptz NOT NULL DEFAULT now())`;
       for (const p of PROYECTOS) {
@@ -78,4 +82,14 @@ export async function mensajes(limite = 40): Promise<Mensaje[]> {
   await preparar();
   const filas = (await sql`SELECT * FROM mensajes ORDER BY creado DESC LIMIT ${limite}`) as Mensaje[];
   return filas.reverse();
+}
+
+export async function recordatorios(opts: { proyecto?: string; pendientes?: boolean } = {}): Promise<(Recordatorio & { proyecto: string })[]> {
+  await preparar();
+  const proy = opts.proyecto ?? null;
+  const pend = opts.pendientes ?? true;
+  return (await sql`SELECT r.id, r.agente, to_char(r.fecha, 'YYYY-MM-DD') AS fecha, r.hora, r.texto, r.enviado, a.proyecto
+    FROM recordatorios r JOIN agentes a ON a.slug = r.agente
+    WHERE (${proy}::text IS NULL OR a.proyecto = ${proy}) AND (${pend}::boolean = false OR r.enviado = false)
+    ORDER BY r.fecha, r.hora LIMIT 100`) as (Recordatorio & { proyecto: string })[];
 }

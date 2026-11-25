@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import AgenteTarjeta from '@/components/AgenteTarjeta';
 import AvisoTarjeta from '@/components/AvisoTarjeta';
 import { datosOficina } from '@/lib/vista';
+import Recordatorios from '@/components/Recordatorios';
+import { recordatorios } from '@/lib/db';
 
 export default async function Edificio({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -12,6 +14,7 @@ export default async function Edificio({ params }: { params: Promise<{ slug: str
   const ags = d.agentesPor(slug);
   const plantas = [...new Set(ags.map((a) => a.planta || 'General'))];
   const avisosProyecto = d.ultimos.filter((a) => a.proyecto === slug);
+  const pendientes = await recordatorios({ proyecto: slug });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -42,6 +45,7 @@ export default async function Edificio({ params }: { params: Promise<{ slug: str
           ))}
         </div>
         <section className="col-lado">
+          <Recordatorios agentes={ags} lista={pendientes} nombres={d.nombreAgente} />
           <h2>Avisos de {p.nombre}</h2>
           {avisosProyecto.length === 0 && <div className="tarjeta suave">Sin avisos todavía.</div>}
           {avisosProyecto.map((a) => (

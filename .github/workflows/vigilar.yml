@@ -1,0 +1,18 @@
+# Cada 10 minutos despierta a los agentes que necesitan mirar a menudo (recordatorios y tickets de Discord).
+# Gratis con GitHub Actions. Si pones CRON_SECRET en Vercel, ponlo también aquí: Settings → Secrets → Actions.
+name: Vigilar
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+jobs:
+  vigilar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Llamar a Mi Oficina
+        env:
+          URL: ${{ vars.MI_OFICINA_URL || 'https://agencia-plum-five.vercel.app' }}
+          SECRETO: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -sS --fail-with-body -m 60 -H "Authorization: Bearer ${SECRETO}" "${URL}/api/cron/frecuente"
