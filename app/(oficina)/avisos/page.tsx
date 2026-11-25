@@ -3,6 +3,7 @@ import AvisoTarjeta from '@/components/AvisoTarjeta';
 import { cerrarSesion, marcarTodoLeido, probarAviso } from '@/app/acciones';
 import { avisos } from '@/lib/db';
 import { datosOficina } from '@/lib/vista';
+import { gastoDelMes, iaActiva } from '@/lib/ia';
 
 const NIVELES = [
   { nivel: 'normal', titulo: 'Mensaje en el chat', color: 'var(--suave)', texto: 'Para lo normal. Te lo escriben en el chat y lo lees cuando entras.' },
@@ -13,6 +14,8 @@ const NIVELES = [
 export default async function Avisos() {
   const d = await datosOficina();
   const todos = await avisos({ limite: 100 });
+  const gasto = await gastoDelMes();
+  const limite = Number(process.env.IA_LIMITE_MENSUAL ?? '1');
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 1100 }}>
       <div>
@@ -33,6 +36,7 @@ export default async function Avisos() {
       <div className="tarjeta" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
         <ActivarAvisos />
         <span className="peq suave">Resumen de la mañana: 08:00 · Recordatorio de Puntos: 20:00</span>
+        <span className="peq suave">{iaActiva() ? `IA activada · gastado este mes: ${gasto.toFixed(3)} $ de ${limite} $` : 'IA sin activar (falta ANTHROPIC_API_KEY en Vercel)'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>Historial</h2>

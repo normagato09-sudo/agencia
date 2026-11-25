@@ -33,7 +33,14 @@ Content-Type: application/json
 - 08:00 → la Secretaria general te manda el resumen del día.
 - 20:00 → el agente de Puntos te recuerda marcar lo que has hecho.
 
+## IA (opcional, Claude Haiku 5.5)
+
+1. Crea una clave en console.anthropic.com (con un poco de saldo).
+2. En Vercel añade `ANTHROPIC_API_KEY` con esa clave y redeploy.
+3. Opcional: `IA_LIMITE_MENSUAL` (en $, por defecto 1). Al llegar al límite, el chat vuelve a las órdenes sencillas hasta el mes siguiente.
+
+El gasto del mes aparece en la pantalla Avisos.
+
 ## Más adelante
 
 - Conectar cada app (Lanzora, Mi Dinero, ORGANIZATOR, Rubiko, Fútbol, CIFA) a su agente.
-- Enchufar la IA en `lib/chat.ts` para poder hablar normal con los agentes.

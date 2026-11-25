@@ -62,7 +62,7 @@ export default function Chat({ iniciales, nombres }: { iniciales: Mensaje[]; nom
       </div>
       <form className="chat-pie" onSubmit={enviar}>
         <label htmlFor="msg" style={{ position: 'absolute', left: -9999 }}>Escribe a tus agentes</label>
-        <input id="msg" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Escribe… (prueba «resumen» o «agentes de Lanzora»)" autoComplete="off" />
+        <input id="msg" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Escribe… (ej.: «¿qué tengo pendiente?»)" autoComplete="off" />
         <button className="btn" type="submit" disabled={enviando} aria-label="Enviar">Enviar</button>
       </form>
     </section>
