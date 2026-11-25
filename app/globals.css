@@ -107,7 +107,7 @@ pre.codigo { padding: 12px; white-space: pre-wrap; }
   .cabecera { padding: 12px 16px; }
   .contenido { padding: 16px 14px calc(88px + env(safe-area-inset-bottom)); }
   .saludo { font-size: 24px; }
-  .resumen { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 -14px; padding: 0 14px; }
+  .resumen { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 14px; scrollbar-width: none; margin: 0 -14px; padding: 0 14px; }
   .resumen::-webkit-scrollbar { display: none; }
   .res-tarjeta { flex: 0 0 62%; scroll-snap-align: start; }
   .proyectos-fila { margin: 0 -14px; padding: 0 14px 4px; }

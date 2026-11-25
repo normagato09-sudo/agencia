@@ -14,7 +14,8 @@ export default async function Inicio() {
   const [d, hoyRec] = await Promise.all([datosOficina(), recordatoriosDeHoy()]);
   const fijos = d.pend.filter((a) => a.nivel === 'urgente');
   const trabajando = d.ags.filter((a) => a.estado === 'trabajando').length;
-  const fecha = new Date().toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long' });
+  const f = new Date().toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long' });
+  const fecha = f.charAt(0).toUpperCase() + f.slice(1);
   const proxRec = hoyRec.find((r) => !r.enviado) ?? hoyRec[0];
   const datoDe = (a: { proyecto: string | null; agente: string | null }) => ({
     proyecto: d.proyectoDe[a.proyecto ?? '']?.nombre ?? '',
@@ -27,7 +28,7 @@ export default async function Inicio() {
       {/* Saludo */}
       <div>
         <h1 className="saludo">{saludo()}, Norma</h1>
-        <div className="suave" style={{ marginTop: 4, textTransform: 'capitalize' }}>{fecha}</div>
+        <div className="suave" style={{ marginTop: 4 }}>{fecha}</div>
       </div>
 
       {/* Resumen del día */}
