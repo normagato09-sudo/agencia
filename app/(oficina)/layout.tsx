@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { estaDentro } from '@/lib/auth';
-import { agentes, preparar } from '@/lib/db';
+import { agentes, avisos, preparar } from '@/lib/db';
+import BarraMovil from '@/components/BarraMovil';
 import Logo from '@/components/Logo';
 import Nav from '@/components/Nav';
 import InstalarApp from '@/components/InstalarApp';
@@ -13,9 +14,11 @@ export default async function OficinaLayout({ children }: { children: React.Reac
 
   let error: string | null = null;
   let total = 0;
+  let pendientes = 0;
   try {
     await preparar();
     total = (await agentes()).length;
+    pendientes = (await avisos({ soloSinLeer: true, limite: 100 })).length;
   } catch (e) {
     error = (e as Error).message;
   }
@@ -27,7 +30,7 @@ export default async function OficinaLayout({ children }: { children: React.Reac
         <Nav />
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <InstalarApp />
-          <span className="chip" style={{ background: '#13261F', color: '#6EE7B7' }}><span className="punto" style={{ background: 'var(--verde)' }} />{total} agentes</span>
+          <span className="chip solo-escritorio" style={{ background: '#13261F', color: '#6EE7B7' }}><span className="punto" style={{ background: 'var(--verde)' }} />{total} agentes</span>
           <div className="inicial" style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--ambar)' }}>N</div>
         </div>
       </header>
@@ -40,6 +43,7 @@ export default async function OficinaLayout({ children }: { children: React.Reac
           </div>
         ) : children}
       </div>
+      <BarraMovil pendientes={pendientes} />
     </>
   );
 }

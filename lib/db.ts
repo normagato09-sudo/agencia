@@ -93,3 +93,10 @@ export async function recordatorios(opts: { proyecto?: string; pendientes?: bool
     WHERE (${proy}::text IS NULL OR a.proyecto = ${proy}) AND (${pend}::boolean = false OR r.enviado = false)
     ORDER BY r.fecha, r.hora LIMIT 100`) as (Recordatorio & { proyecto: string })[];
 }
+
+/** Recordatorios de hoy (hora de España), enviados o no. */
+export async function recordatoriosDeHoy(): Promise<Recordatorio[]> {
+  await preparar();
+  return (await sql`SELECT id, agente, to_char(fecha, 'YYYY-MM-DD') AS fecha, hora, texto, enviado FROM recordatorios
+    WHERE fecha = (now() AT TIME ZONE 'Europe/Madrid')::date ORDER BY hora`) as Recordatorio[];
+}
