@@ -4,10 +4,6 @@
     {
       "path": "/api/cron/diario",
       "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cron/tarde",
-      "schedule": "0 19 * * *"
     }
   ]
 }
