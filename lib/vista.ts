@@ -9,7 +9,10 @@ export async function datosOficina() {
   const nombreAgente = Object.fromEntries(ags.map((a) => [a.slug, a.nombre]));
   const agentesPor = (slug: string) => ags.filter((a) => a.proyecto === slug);
   const pendientesPor = (slug: string) => pend.filter((a) => a.proyecto === slug).length;
-  return { ps, ags, pend, ultimos, chat, proyectoDe, nombreAgente, agentesPor, pendientesPor };
+  const infoAgentes = Object.fromEntries(ags.map((a) => [a.slug, {
+    nombre: a.nombre, proyecto: a.proyecto, proyectoNombre: proyectoDe[a.proyecto]?.nombre ?? '', color: proyectoDe[a.proyecto]?.color ?? '#9BA7B4',
+  }]));
+  return { ps, ags, pend, ultimos, chat, proyectoDe, nombreAgente, infoAgentes, agentesPor, pendientesPor };
 }
 
 export const iniciales = (n: string) => n.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ ]/g, '').trim().slice(0, 2).toUpperCase();

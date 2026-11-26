@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Chat from '@/components/Chat';
-import AvisoTarjeta from '@/components/AvisoTarjeta';
 import ActivarAvisos from '@/components/ActivarAvisos';
 import { recordatoriosDeHoy } from '@/lib/db';
 import { datosOficina, iniciales } from '@/lib/vista';
@@ -17,11 +16,6 @@ export default async function Inicio() {
   const f = new Date().toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long' });
   const fecha = f.charAt(0).toUpperCase() + f.slice(1);
   const proxRec = hoyRec.find((r) => !r.enviado) ?? hoyRec[0];
-  const datoDe = (a: { proyecto: string | null; agente: string | null }) => ({
-    proyecto: d.proyectoDe[a.proyecto ?? '']?.nombre ?? '',
-    color: d.proyectoDe[a.proyecto ?? '']?.color ?? '#fff',
-    agente: d.nombreAgente[a.agente ?? ''] ?? '',
-  });
 
   return (
     <div className="inicio">
@@ -55,8 +49,7 @@ export default async function Inicio() {
         </Link>
       </div>
 
-      {/* Avisos fijos: siempre arriba hasta que pulses «Visto» */}
-      {fijos.map((a) => <AvisoTarjeta key={a.id} a={a} {...datoDe(a)} />)}
+      <ActivarAvisos />
 
       {/* Proyectos en una fila deslizable */}
       <div className="proyectos-fila" aria-label="Mis proyectos">
@@ -75,17 +68,8 @@ export default async function Inicio() {
       {/* Chat (lo principal) + últimos avisos al lado en el ordenador */}
       <div className="inicio-cuerpo">
         <div className="inicio-chat">
-          <Chat iniciales={d.chat} nombres={d.nombreAgente} />
+          <Chat iniciales={d.chat} agentes={d.infoAgentes} />
         </div>
-        <aside className="inicio-lado solo-escritorio">
-          <ActivarAvisos />
-          <h2>Últimos avisos</h2>
-          {d.ultimos.filter((a) => !(a.nivel === 'urgente' && !a.leido)).slice(0, 5).map((a) => (
-            <AvisoTarjeta key={a.id} a={a} {...datoDe(a)} />
-          ))}
-          {d.ultimos.length === 0 && <div className="tarjeta suave">Todavía no hay avisos.</div>}
-          <Link href="/avisos" className="tarjeta" style={{ textAlign: 'center', borderStyle: 'dashed' }}>Todos los avisos →</Link>
-        </aside>
       </div>
     </div>
   );

@@ -12,11 +12,11 @@ export async function POST(req: Request) {
   if (req.headers.get('authorization') !== `Bearer ${clave}`) {
     return NextResponse.json({ error: 'Clave incorrecta' }, { status: 401 });
   }
-  const b = (await req.json().catch(() => ({}))) as { agente?: string; nivel?: Nivel; titulo?: string; texto?: string };
+  const b = (await req.json().catch(() => ({}))) as { agente?: string; nivel?: Nivel; titulo?: string; texto?: string; url?: string };
   if (!b.agente || !b.titulo) return NextResponse.json({ error: 'Faltan «agente» y «titulo»' }, { status: 400 });
   const nivel: Nivel = b.nivel === 'urgente' || b.nivel === 'importante' ? b.nivel : 'normal';
   try {
-    const aviso = await avisar({ agente: b.agente, nivel, titulo: b.titulo.slice(0, 200), texto: (b.texto ?? '').slice(0, 2000) });
+    const aviso = await avisar({ agente: b.agente, nivel, titulo: b.titulo.slice(0, 200), texto: (b.texto ?? '').slice(0, 2000), url: typeof b.url === 'string' && /^https?:\/\//.test(b.url) ? b.url.slice(0, 500) : undefined });
     return NextResponse.json({ ok: true, id: aviso.id });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });

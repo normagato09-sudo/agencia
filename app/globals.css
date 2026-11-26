@@ -95,7 +95,7 @@ pre.codigo { padding: 12px; white-space: pre-wrap; }
 .proyecto-chip:hover { color: var(--texto); border-color: #3A4452; }
 .inicio-cuerpo { display: flex; gap: 20px; align-items: flex-start; }
 .inicio-chat { flex: 1; min-width: 0; }
-.inicio-chat .chat { height: calc(100vh - 330px); min-height: 460px; max-height: none; }
+.inicio-chat .chat { height: calc(100vh - 300px); min-height: 460px; max-height: none; }
 .inicio-lado { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
 
 /* ---------- Barra de pestañas del móvil ---------- */
@@ -121,3 +121,25 @@ pre.codigo { padding: 12px; white-space: pre-wrap; }
   .barra-movil a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; min-height: 52px; justify-content: center; color: var(--suave); font-size: 11px; font-weight: 600; border-radius: 12px; }
   .barra-movil a.activo { color: var(--acento); }
 }
+
+/* ---------- Avisos estilo chat (B) ---------- */
+.aviso-chat { display: flex; gap: 8px; align-items: flex-end; }
+.avatar-agente { width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; color: #0E1116; font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.aviso-cab-chat { color: var(--suave); font-size: 11px; font-weight: 700; margin: 0 0 4px 4px; }
+.aviso-cab-chat.rojo { color: #FCA5A5; }
+.burbuja-aviso { background: var(--panel2); border: 1px solid transparent; border-radius: 16px 16px 16px 4px; padding: 10px 12px; line-height: 1.45; }
+.burbuja-aviso.urgente { background: #2A1517; border-color: #7F2A2A; }
+.burbuja-aviso.hecho { opacity: .6; }
+.aviso-titulo { font-weight: 700; }
+.aviso-cuerpo { color: #C9D1D9; margin-top: 4px; font-size: 13.5px; }
+.botones-aviso { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.pildora { border: 1px solid var(--borde); background: transparent; color: var(--texto); border-radius: 999px; padding: 7px 12px; font-size: 12px; cursor: pointer; min-height: 32px; display: inline-flex; align-items: center; }
+.pildora:hover { border-color: #3A4452; color: var(--texto); }
+.pildora.principal { border: 0; background: var(--acento); color: #0E1116; font-weight: 700; }
+.pildora.apagada { color: var(--suave); cursor: default; }
+.pildora:disabled { opacity: .5; }
+.separador-dia { align-self: center; color: var(--suave); font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--panel2); }
+.separador-dia::first-letter { text-transform: uppercase; }
+.respondiendo { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 14px; border-top: 1px solid var(--borde); background: #12302C; font-size: 13px; }
+.respondiendo span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nota-flotante { align-self: center; background: var(--texto); color: #0E1116; font-weight: 600; font-size: 13px; padding: 8px 14px; border-radius: 999px; }

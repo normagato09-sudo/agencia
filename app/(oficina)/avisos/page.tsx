@@ -8,7 +8,7 @@ import { gastoDelMes, iaActiva } from '@/lib/ia';
 const NIVELES = [
   { nivel: 'normal', titulo: 'Mensaje en el chat', color: 'var(--suave)', texto: 'Para lo normal. Te lo escriben en el chat y lo lees cuando entras.' },
   { nivel: 'importante', titulo: 'Notificación', color: 'var(--ambar)', texto: 'Para lo importante. Te llega al móvil u ordenador aunque Mi Oficina esté cerrada.' },
-  { nivel: 'urgente', titulo: 'Aviso fijo', color: 'var(--rojo)', texto: 'Para lo urgente. Notificación + se queda arriba del todo hasta que pulsas «Visto».' },
+  { nivel: 'urgente', titulo: 'Aviso fijo', color: 'var(--rojo)', texto: 'Para lo urgente. Notificación + mensaje en rojo hasta que pulses «Hecho».' },
 ];
 
 export default async function Avisos() {
@@ -40,9 +40,9 @@ export default async function Avisos() {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>Historial</h2>
-        <form action={marcarTodoLeido}><button className="btn sec" style={{ padding: '7px 12px', fontSize: 13 }}>Marcar todo como visto</button></form>
+        <form action={marcarTodoLeido}><button className="btn sec" style={{ padding: '7px 12px', fontSize: 13 }}>Marcar todo como hecho</button></form>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 18 }}>
         {todos.length === 0 && <div className="tarjeta suave">Aún no hay avisos. Pulsa «Probar» arriba para ver cómo llegan.</div>}
         {todos.map((a) => (
           <AvisoTarjeta key={a.id} a={a} proyecto={d.proyectoDe[a.proyecto ?? '']?.nombre ?? ''} color={d.proyectoDe[a.proyecto ?? '']?.color ?? '#fff'} agente={d.nombreAgente[a.agente ?? ''] ?? ''} />

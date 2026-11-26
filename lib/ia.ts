@@ -66,8 +66,12 @@ async function llamar(system: string, msgs: unknown[]) {
   return j;
 }
 
-export async function responderIA(texto: string): Promise<string> {
-  if (!iaActiva()) return responderSinIA(texto);
+export async function responderIA(texto: string, respuestaA?: { agente: string; titulo: string }): Promise<string> {
+  if (!iaActiva()) {
+    if (respuestaA) return `Apuntado. Le paso tu respuesta a ${respuestaA.agente} sobre «${respuestaA.titulo}». Cuando actives la IA, los agentes podrán actuar con lo que les digas.`;
+    return responderSinIA(texto);
+  }
+  if (respuestaA) texto = `(Respondo al aviso de ${respuestaA.agente}: «${respuestaA.titulo}») ${texto}`;
   if ((await gastoDelMes()) >= limiteMensual()) {
     return `He llegado al límite de IA de este mes (${limiteMensual()} $), así que hasta el mes que viene uso las órdenes sencillas.\n\n${await responderSinIA(texto)}`;
   }

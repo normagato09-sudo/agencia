@@ -13,10 +13,15 @@ export type Agente = {
 };
 export type Aviso = {
   id: number; agente: string | null; proyecto: string | null; nivel: 'normal' | 'importante' | 'urgente';
-  titulo: string; texto: string; leido: boolean; creado: string;
+  titulo: string; texto: string; leido: boolean; creado: string; url: string | null;
 };
 export type Recordatorio = { id: number; agente: string; fecha: string; hora: string; texto: string; enviado: boolean };
-export type Mensaje = { id: number; de: 'norma' | 'agente'; agente: string | null; texto: string; creado: string };
+export type Mensaje = {
+  id: number; de: 'norma' | 'agente'; agente: string | null; texto: string; creado: string;
+  /** Si el mensaje es un aviso: sus datos (para enseñarlo con botones). */
+  aviso_id: number | null; aviso_titulo: string | null; aviso_texto: string | null; aviso_nivel: Aviso['nivel'] | null;
+  aviso_leido: boolean | null; aviso_url: string | null; aviso_proyecto: string | null;
+};
 
 let listo: Promise<void> | null = null;
 
@@ -50,6 +55,9 @@ export function preparar(): Promise<void> {
         await sql`INSERT INTO agentes (slug, proyecto, nombre, planta, app, trabajo)
           VALUES (${a.slug}, ${a.proyecto}, ${a.nombre}, ${a.planta}, ${a.app}, ${a.trabajo}) ON CONFLICT (slug) DO NOTHING`;
       }
+      // Avisos con botones (estilo chat): enlace del aviso y aviso de cada mensaje.
+      await sql`ALTER TABLE avisos ADD COLUMN IF NOT EXISTS url text`;
+      await sql`ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS aviso_id int`;
       // Agentes que se han quitado: se desactivan (sus avisos antiguos se quedan en el historial).
       await sql`UPDATE agentes SET activo = false WHERE slug IN ('puntos-diario')`;
     })().catch((e) => { listo = null; throw e; });
@@ -82,7 +90,10 @@ export async function avisos(opts: { soloSinLeer?: boolean; limite?: number; pro
 
 export async function mensajes(limite = 40): Promise<Mensaje[]> {
   await preparar();
-  const filas = (await sql`SELECT * FROM mensajes ORDER BY creado DESC LIMIT ${limite}`) as Mensaje[];
+  const filas = (await sql`SELECT m.*, a.titulo AS aviso_titulo, a.texto AS aviso_texto, a.nivel AS aviso_nivel,
+      a.leido AS aviso_leido, a.url AS aviso_url, a.proyecto AS aviso_proyecto
+    FROM mensajes m LEFT JOIN avisos a ON a.id = m.aviso_id
+    ORDER BY m.creado DESC, m.id DESC LIMIT ${limite}`) as Mensaje[];
   return filas.reverse();
 }
 
