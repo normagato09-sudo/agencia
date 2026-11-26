@@ -60,8 +60,9 @@ export function preparar(): Promise<void> {
       await sql`ALTER TABLE mensajes ADD COLUMN IF NOT EXISTS aviso_id int`;
       // Avisos de antes del estilo chat: el enlace pasa al botón «Abrir» y cada mensaje se une a su aviso.
       await sql`UPDATE avisos SET url = substring(texto from 'https?://[^[:space:])]+'),
-        texto = btrim(regexp_replace(texto, '\s*https?://[^[:space:])]+', '', 'g'))
+        texto = btrim(regexp_replace(texto, '[[:space:]]*https?://[^[:space:])]+', '', 'g'), E' \n')
         WHERE url IS NULL AND texto ~ 'https?://'`;
+      await sql`UPDATE avisos SET texto = btrim(texto, E' \n') WHERE texto ~ '\n$'`;
       await sql`UPDATE mensajes m SET aviso_id = a.id FROM avisos a
         WHERE m.aviso_id IS NULL AND m.de = 'agente' AND m.agente = a.agente
           AND left(m.texto, length(a.titulo)) = a.titulo AND abs(extract(epoch FROM m.creado - a.creado)) < 10`;
