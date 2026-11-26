@@ -31,7 +31,6 @@ Content-Type: application/json
 ## Tareas automáticas (Vercel Cron)
 
 - 08:00 → la Secretaria general te manda el resumen del día.
-- 20:00 → Puntos (su propia app) avisa al agente puntos-diario si te faltan tareas por marcar.
 
 ## IA (opcional, Claude Haiku 5.5)
 

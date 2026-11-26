@@ -35,7 +35,7 @@ export default async function Avisos() {
       </div>
       <div className="tarjeta" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
         <ActivarAvisos />
-        <span className="peq suave">Resumen de la mañana: 08:00 · Recordatorio de Puntos: 20:00</span>
+        <span className="peq suave">Resumen de la mañana: 08:00</span>
         <span className="peq suave">{iaActiva() ? `IA activada · gastado este mes: ${gasto.toFixed(3)} $ de ${limite} $` : 'IA sin activar (falta ANTHROPIC_API_KEY en Vercel)'}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

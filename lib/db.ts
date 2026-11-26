@@ -50,6 +50,8 @@ export function preparar(): Promise<void> {
         await sql`INSERT INTO agentes (slug, proyecto, nombre, planta, app, trabajo)
           VALUES (${a.slug}, ${a.proyecto}, ${a.nombre}, ${a.planta}, ${a.app}, ${a.trabajo}) ON CONFLICT (slug) DO NOTHING`;
       }
+      // Agentes que se han quitado: se desactivan (sus avisos antiguos se quedan en el historial).
+      await sql`UPDATE agentes SET activo = false WHERE slug IN ('puntos-diario')`;
     })().catch((e) => { listo = null; throw e; });
   }
   return listo;

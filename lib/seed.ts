@@ -38,6 +38,5 @@ export const AGENTES: { slug: string; proyecto: string; nombre: string; planta: 
   { slug: 'dinero-resumen', proyecto: 'mi-dinero', nombre: 'Resumen de gastos', planta: 'Casa', app: 'Mi Dinero', trabajo: 'Cada semana o mes te dice cuánto has gastado y en qué.' },
 
   { slug: 'organizator-examenes', proyecto: 'organizator', nombre: 'Exámenes y entregas', planta: 'Casa', app: 'ORGANIZATOR', trabajo: 'Te avisa de exámenes, deberes y entregas.' },
-  { slug: 'puntos-diario', proyecto: 'puntos', nombre: 'Recordatorio diario', planta: 'Casa', app: 'App de puntos', trabajo: 'Te recuerda marcar lo que has hecho ese día.' },
   { slug: 'futbol-partidos', proyecto: 'futbol', nombre: 'Partidos', planta: 'Casa', app: 'Barça · España · Athletic', trabajo: 'Te avisa cuando juegan el Barça, España y el Athletic Club.' },
 ];
