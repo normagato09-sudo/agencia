@@ -1,4 +1,4 @@
-import { borrarRecordatorio, crearRecordatorio } from '@/app/acciones';
+import { borrarRecordatorio, crearRecordatorio, crearSerie } from '@/app/acciones';
 import type { Agente, Recordatorio } from '@/lib/db';
 
 const dia = (f: string) => new Date(`${f}T12:00:00`).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
@@ -26,6 +26,24 @@ export default function Recordatorios({ agentes, lista, nombres }: { agentes: Ag
         </div>
         <button className="btn" type="submit">Añadir recordatorio</button>
       </form>
+      <details>
+        <summary className="peq" style={{ cursor: 'pointer', color: 'var(--acento)', fontWeight: 600, padding: '6px 0' }}>Una cada día (serie)</summary>
+        <form action={crearSerie} style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+          <label className="peq suave">Una por línea: el día 1 la primera, el día 2 la segunda…
+            <textarea name="lista" required rows={5} placeholder={'Idea para el día 1\nIdea para el día 2'} />
+          </label>
+          <label className="peq suave">Agente
+            <select name="agente" defaultValue={agentes.find((a) => /tiktok|instagram/i.test(a.nombre))?.slug ?? agentes[0].slug}>
+              {agentes.map((a) => <option key={a.slug} value={a.slug}>{a.nombre}</option>)}
+            </select>
+          </label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <label className="peq suave" style={{ flex: 1 }}>Empieza el<input name="fecha" type="date" required min={hoy} defaultValue={hoy} /></label>
+            <label className="peq suave" style={{ width: 110 }}>Hora<input name="hora" type="time" defaultValue="18:00" /></label>
+          </div>
+          <button className="btn sec" type="submit">Crear serie</button>
+        </form>
+      </details>
       {lista.length === 0 && <div className="peq suave">No hay recordatorios pendientes.</div>}
       {lista.map((r) => (
         <div key={r.id} style={{ display: 'flex', gap: 10, alignItems: 'center', borderTop: '1px solid var(--borde)', paddingTop: 8 }}>

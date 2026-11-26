@@ -72,3 +72,22 @@ export async function borrarRecordatorio(form: FormData) {
   if (id) await sql`DELETE FROM recordatorios WHERE id = ${id}`;
   revalidatePath('/', 'layout');
 }
+
+/** Serie: una línea por día, empezando el día elegido, a la misma hora. */
+export async function crearSerie(form: FormData) {
+  await asegurar();
+  const agente = String(form.get('agente') ?? '');
+  const desde = String(form.get('fecha') ?? '');
+  const hora = String(form.get('hora') ?? '') || '18:00';
+  const lineas = String(form.get('lista') ?? '')
+    .split('\n')
+    .map((l) => l.replace(/^\s*\d+[.)]\s*/, '').trim())
+    .filter(Boolean)
+    .slice(0, 60);
+  if (!agente || !/^\d{4}-\d{2}-\d{2}$/.test(desde) || !/^\d{2}:\d{2}$/.test(hora) || lineas.length === 0) return;
+  for (let i = 0; i < lineas.length; i++) {
+    await sql`INSERT INTO recordatorios (agente, fecha, hora, texto)
+      VALUES (${agente}, ${desde}::date + ${i}::int, ${hora}, ${lineas[i].slice(0, 300)})`;
+  }
+  revalidatePath('/', 'layout');
+}
